@@ -1,0 +1,4 @@
+include README.rst
+include requirements.txt
+recursive-include templatesAndSettings/templates *
+recursive-include ODM2CZOData/upfiles *

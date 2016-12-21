@@ -1,6 +1,6 @@
 import os
 import sys
-from setuptools import setup
+from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
 
 
@@ -15,7 +15,7 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-def extract_version(module='odm2djangoadmin'):
+def extract_version(module='ODM2CZOData'):
     version = None
     fdir = os.path.dirname(__file__)
     fnme = os.path.join(fdir, module, '__init__.py')
@@ -37,7 +37,6 @@ def read(*parts):
 
 
 long_description = '{}'.format(read('README.rst'))
-LICENSE = read('LICENSE.txt')
 
 with open('requirements.txt') as f:
     require = f.readlines()
@@ -45,7 +44,7 @@ install_requires = [r.strip() for r in require]
 
 setup(name='odm2djangoadmin',
       version=extract_version(),
-      license=LICENSE,
+      license='MIT License',
       long_description=long_description,
       classifiers=['Development Status :: 5 - Production/Stable',
                    'Environment :: Console',
@@ -63,12 +62,8 @@ setup(name='odm2djangoadmin',
       platforms='any',
       keywords=['ODM2', 'Django'],
       install_requires=install_requires,
-      packages=['odm2djangoadmin',
-                'odm2djangoadmin/templatesAndSettings',
-                'odm2djangoadmin/ODM2CZOData',
-                'odm2djangoadmin/ODM2CZOData/migrations',
-                'odm2djangoadmin/ODM2CZOData/templatetags'
-                ],
+      packages=find_packages(),
+      include_package_data=True,
       tests_require=['pytest'],
       cmdclass=dict(test=PyTest),
       author=['Miguel Leon'],
