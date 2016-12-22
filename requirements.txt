@@ -7,3 +7,5 @@ django-daterange-filter
 django-import-export
 django-jquery
 psycopg2
+Click
+pyyaml

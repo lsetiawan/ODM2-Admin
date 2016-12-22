@@ -68,4 +68,8 @@ setup(name='odm2djangoadmin',
       cmdclass=dict(test=PyTest),
       author=['Miguel Leon'],
       author_email='leonmi@sas.upenn.edu',
+      entry_points='''
+        [console_scripts]
+        runserver_odm2admin=runserver.runserver_odm2admin:cli
+      '''
       )
