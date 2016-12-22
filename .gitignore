@@ -54,3 +54,4 @@ log
 *.pyc
 .gitignore
 templatesAndSettings/config.json
+base.py

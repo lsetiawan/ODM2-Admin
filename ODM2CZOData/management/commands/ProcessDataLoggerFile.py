@@ -13,6 +13,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 from django.db import transaction
 from django.db.models import Min, Max
+from django.conf import settings
 
 from ODM2CZOData.models import CvCensorcode
 from ODM2CZOData.models import CvQualitycode
@@ -22,7 +23,6 @@ from ODM2CZOData.models import Extensionproperties
 from ODM2CZOData.models import Resultextensionpropertyvalues
 from ODM2CZOData.models import Timeseriesresults
 from ODM2CZOData.models import Timeseriesresultvalues
-from templatesAndSettings.settings import MEDIA_ROOT
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "templatesAndSettings.settings")
 
@@ -90,7 +90,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):  # (f,fileid, databeginson,columnheaderson, cmd):
         # cmdline = bool(options['cmdline'][0])
         filename = str(options['dataloggerfilelink'][0])
-        file = str(MEDIA_ROOT) + filename  #args[0].name
+        file = str(settings.MEDIA_ROOT) + filename  #args[0].name
         fileid = int(options['dataloggerfileid'][0])
         fileid = Dataloggerfiles.objects.filter(dataloggerfileid=fileid).get()
         check_dates = False  # bool(args[4]) for some reason this arg is not working

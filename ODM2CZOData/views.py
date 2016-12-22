@@ -16,11 +16,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.template.response import TemplateResponse
 from django.core.exceptions import ObjectDoesNotExist
-
-from templatesAndSettings.base import ADMIN_SHORTCUTS
-from templatesAndSettings.settings import CUSTOM_TEMPLATE_PATH
-from templatesAndSettings.settings import DATA_DISCLAIMER as DATA_DSICLAIMER
-from templatesAndSettings.settings import MAP_CONFIG as MAP_CONFIG
+from django.conf import settings
 
 from .models import Actions
 from .models import Authorlists
@@ -258,16 +254,16 @@ def publications(request):
                              'selectedCategory': selectedCategory,
                              'selectedTag': selectedTag, 'peopleList': peopleList,
                              'selectedAuthor': selectedAuthor,
-                             'prefixpath': CUSTOM_TEMPLATE_PATH})
+                             'prefixpath': settings.CUSTOM_TEMPLATE_PATH})
 
 
 # ======================= SHORTCUTS =========================================
 def AddSensor(request):
     if request.user.is_authenticated():
-        context = {'prefixpath': CUSTOM_TEMPLATE_PATH, 'name': request.user,
+        context = {'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'name': request.user,
                    'authenticated': True, 'site_title': admin.site.site_title,
                    'site_header': admin.site.site_header,
-                   'short_title': ADMIN_SHORTCUTS[0]['shortcuts'][1]['title']}
+                   'short_title': settings.ADMIN_SHORTCUTS[0]['shortcuts'][1]['title']}
         return TemplateResponse(request, 'AddSensor.html', context)
     else:
         return HttpResponseRedirect('../')
@@ -275,10 +271,10 @@ def AddSensor(request):
 
 def chartIndex(request):
     if request.user.is_authenticated():
-        context = {'prefixpath': CUSTOM_TEMPLATE_PATH, 'name': request.user,
+        context = {'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'name': request.user,
                    'authenticated': True, 'site_title': admin.site.site_title,
                    'site_header': admin.site.site_header,
-                   'short_title': ADMIN_SHORTCUTS[0]['shortcuts'][5]['title']}
+                   'short_title': settings.ADMIN_SHORTCUTS[0]['shortcuts'][5]['title']}
         return TemplateResponse(request, 'chartIndex.html', context)
     else:
         return HttpResponseRedirect('../')
@@ -287,10 +283,10 @@ def chartIndex(request):
 # chartIndex
 def AddProfile(request):
     if request.user.is_authenticated():
-        context = {'prefixpath': CUSTOM_TEMPLATE_PATH, 'name': request.user,
+        context = {'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'name': request.user,
                    'authenticated': True, 'site_title': admin.site.site_title,
                    'site_header': admin.site.site_header,
-                   'short_title': ADMIN_SHORTCUTS[0]['shortcuts'][2]['title']}
+                   'short_title': settings.ADMIN_SHORTCUTS[0]['shortcuts'][2]['title']}
         return TemplateResponse(request, 'AddProfile.html', context)
     else:
         return HttpResponseRedirect('../')
@@ -298,10 +294,10 @@ def AddProfile(request):
 
 def RecordAction(request):
     if request.user.is_authenticated():
-        context = {'prefixpath': CUSTOM_TEMPLATE_PATH, 'name': request.user,
+        context = {'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'name': request.user,
                    'authenticated': True, 'site_title': admin.site.site_title,
                    'site_header': admin.site.site_header,
-                   'short_title': ADMIN_SHORTCUTS[0]['shortcuts'][3]['title']}
+                   'short_title': settings.ADMIN_SHORTCUTS[0]['shortcuts'][3]['title']}
         return TemplateResponse(request, 'RecordAction.html', context)
     else:
         return HttpResponseRedirect('../')
@@ -309,10 +305,10 @@ def RecordAction(request):
 
 def ManageCitations(request):
     if request.user.is_authenticated():
-        context = {'prefixpath': CUSTOM_TEMPLATE_PATH, 'name': request.user,
+        context = {'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'name': request.user,
                    'authenticated': True, 'site_title': admin.site.site_title,
                    'site_header': admin.site.site_header,
-                   'short_title': ADMIN_SHORTCUTS[0]['shortcuts'][4]['title']}
+                   'short_title': settings.ADMIN_SHORTCUTS[0]['shortcuts'][4]['title']}
         return TemplateResponse(request, 'ManageCitations.html', context)
     else:
         return HttpResponseRedirect('../')
@@ -424,8 +420,8 @@ def web_map(request, dataset='NotSet'):
         authenticated = True
     else:
         authenticated = False
-    map_config = MAP_CONFIG
-    data_disclaimer = DATA_DSICLAIMER
+    map_config = settings.MAP_CONFIG
+    data_disclaimer = settings.DATA_DISCLAIMER
 
     datasets = Datasets.objects.all()
     externalidentifiers = None
@@ -542,7 +538,7 @@ def web_map(request, dataset='NotSet'):
     ]
 
     context = {
-        'prefixpath': CUSTOM_TEMPLATE_PATH, 'legends': json.dumps(legend_ref), 'features': features,
+        'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'legends': json.dumps(legend_ref), 'features': features,
         'results': results,
         'externalidentifiers': externalidentifiers,
         'datasets': datasets, 'selecteddatasets': selected, 'authenticated': authenticated,
@@ -823,8 +819,8 @@ def TimeSeriesGraphing(request, feature_action='All'):
         return TemplateResponse(request,
                                 template,
                                 {'featureactionList': featureactionList,
-                                 'prefixpath': CUSTOM_TEMPLATE_PATH,
-                                 'data_disclaimer': DATA_DSICLAIMER,
+                                 'prefixpath': settings.CUSTOM_TEMPLATE_PATH,
+                                 'data_disclaimer': settings.DATA_DISCLAIMER,
                                  'resultList': resultList,
                                  'startDate': entered_start_date,
                                  'endDate': entered_end_date,
@@ -1059,8 +1055,8 @@ def TimeSeriesGraphing(request, feature_action='All'):
         # raise ValidationError(relatedFeatureList)
         return TemplateResponse(request, template,
                                 {'featureactionList': featureactionList,
-                                 'prefixpath': CUSTOM_TEMPLATE_PATH,
-                                 'data_disclaimer': DATA_DSICLAIMER, 'resultList': resultList,
+                                 'prefixpath': settings.CUSTOM_TEMPLATE_PATH,
+                                 'data_disclaimer': settings.DATA_DISCLAIMER, 'resultList': resultList,
                                  'startDate': entered_start_date, 'endDate': entered_end_date,
                                  'SelectedResults': int_selectedresultid_ids,
                                  'authenticated': authenticated,
@@ -1089,7 +1085,7 @@ def mappopuploader(request, feature_action='NotSet', samplingfeature='NotSet', d
         template = loader.get_template('chart2.html')
     else:
         template = loader.get_template('chartpopup.html')
-    data_disclaimer = DATA_DSICLAIMER
+    data_disclaimer = settings.DATA_DISCLAIMER
     useDataset = False
     useSamplingFeature = False
     if dataset == 'NotSet':
@@ -1179,7 +1175,7 @@ def mappopuploader(request, feature_action='NotSet', samplingfeature='NotSet', d
             # return HttpResponse(html)
             methodsOnly = 'True'
 
-    return TemplateResponse(request, template, {'prefixpath': CUSTOM_TEMPLATE_PATH,
+    return TemplateResponse(request, template, {'prefixpath': settings.CUSTOM_TEMPLATE_PATH,
                                                 'useSamplingFeature': useSamplingFeature,
                                                 'methodsOnly': methodsOnly,
                                                 'featureActions': featureActions,
@@ -1206,8 +1202,8 @@ def TimeSeriesGraphingShort(request, feature_action='NotSet', samplingfeature='N
         template = loader.get_template('chart2.html')
     else:
         template = loader.get_template('chartpopup.html')
-    data_disclaimer = DATA_DSICLAIMER
-    map_config = MAP_CONFIG
+    data_disclaimer = settings.DATA_DISCLAIMER
+    map_config = settings.MAP_CONFIG
     useDataset = False
     useSamplingFeature = False
     # if 'annotation' in request.POST:
@@ -1419,7 +1415,7 @@ def TimeSeriesGraphingShort(request, feature_action='NotSet', samplingfeature='N
         return response
     else:
         # raise ValidationError(relatedFeatureList)
-        return TemplateResponse(request, template, {'prefixpath': CUSTOM_TEMPLATE_PATH,
+        return TemplateResponse(request, template, {'prefixpath': settings.CUSTOM_TEMPLATE_PATH,
                                                     'startDate': entered_start_date,
                                                     'endDate': entered_end_date,
                                                     'useSamplingFeature': useSamplingFeature,
@@ -1621,7 +1617,7 @@ def scatter_plot(request):
         response = exportspreadsheet(request, resultValuesSeries)
         return response
     return TemplateResponse(request, 'soilsscatterplot.html',
-                            {'prefixpath': CUSTOM_TEMPLATE_PATH, 'data_disclaimer': DATA_DSICLAIMER,
+                            {'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'data_disclaimer': settings.DATA_DISCLAIMER, #noqa
                              'xVariables': variables, 'yVariables': variables,
                              'authenticated': authenticated,
                              'xVariableSelection': xVariableSelection,
@@ -1845,7 +1841,7 @@ def graph_data(request, selectedrelatedfeature='NotSet', samplingfeature='NotSet
     else:
         template = loader.get_template('profileresultgraphpopup.html')
     selected_relatedfeatid = 15
-    data_disclaimer = DATA_DSICLAIMER
+    data_disclaimer = settings.DATA_DISCLAIMER
     # relatedfeatureList
     # update_result_on_related_feature
 
@@ -2088,7 +2084,7 @@ def graph_data(request, selectedrelatedfeature='NotSet', samplingfeature='NotSet
         name_of_units = removeDupsFromListOfStrings(name_of_units)
         # raise ValidationError(relatedFeatureList)
         return TemplateResponse(request, template,
-                                {'prefixpath': CUSTOM_TEMPLATE_PATH, 'variableList': variableList,
+                                {'prefixpath': settings.CUSTOM_TEMPLATE_PATH, 'variableList': variableList,
                                  'SelectedVariables': int_selectedvariable_ids,
                                  'authenticated': authenticated, 'data_disclaimer': data_disclaimer,
                                  'chartID': chartID, 'chart': chart, 'series': series,

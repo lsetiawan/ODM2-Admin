@@ -16,8 +16,8 @@ import time
 from django.contrib.gis.db import models as gis_models
 from django.contrib.gis.geos import GEOSGeometry
 from django.db import models
+from django.conf import settings
 
-from templatesAndSettings.settings import MEDIA_ROOT
 # from django.forms import ModelFormWithFileField
 # from .forms import DataloggerprogramfilesAdminForm
 # from odm2testapp.forms import VariablesForm
@@ -31,7 +31,7 @@ from django.core.exceptions import ValidationError
 
 
 def handle_uploaded_file(f, id):
-    destination = io.open(MEDIA_ROOT + '/resultvalues/' + f.name + '.csv', 'wb+')
+    destination = io.open(settings.MEDIA_ROOT + '/resultvalues/' + f.name + '.csv', 'wb+')
     # data = open(f)
     for chunk in f.chunks():
         destination.write(chunk)
@@ -39,7 +39,7 @@ def handle_uploaded_file(f, id):
 
     destination.close()
     try:
-        with io.open(MEDIA_ROOT + '/resultvalues/' + f.name + '.csv', 'rt', encoding='ascii') as f:
+        with io.open(settings.MEDIA_ROOT + '/resultvalues/' + f.name + '.csv', 'rt', encoding='ascii') as f:
             reader = csv.reader(f)
             for row in reader:
                 # raise ValidationError(row) #print the current row
