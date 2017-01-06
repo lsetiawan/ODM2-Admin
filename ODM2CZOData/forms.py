@@ -1,6 +1,7 @@
 # from __future__ import unicode_literals
 from django.contrib.gis import forms, admin
 from django.contrib.gis.geos import GEOSGeometry
+from django.db.models import AutoField
 from django.forms import CharField
 from django.forms import ModelForm
 from django.forms import TypedChoiceField
@@ -1996,8 +1997,38 @@ class PeopleAdminForm(ModelForm):
         fields = '__all__'
 
 
+class ORCIDAdminForm(ModelForm):
+    class Meta:
+        model = Personexternalidentifiers
+        fields = ['bridgeid',
+                  'personid',
+                  'externalidentifiersystemid',
+                  'personexternalidentifier',
+                  'personexternalidentifieruri']
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        if instance:
+            orcid = instance.personexternalidentifier
+            initial = kwargs.get('initial', {})
+            initial['personexternalidentifieruri'] = 'http://orcid.org/{}'.format(orcid)
+            kwargs['initial'] = initial
+            instance.personexternalidentifieruri = 'http://orcid.org/{}'.format(orcid)
+        super(ORCIDAdminForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True, *args, **kwargs):
+        m = super(ORCIDAdminForm, self).save(commit=False)
+
+        m.personexternalidentifieruri = 'http://orcid.org/{}'.format(m.personexternalidentifier)
+
+        if commit:
+            m.save()
+        return m
+
+
 class ORCIDInLine(admin.StackedInline):
     model = Personexternalidentifiers
+    form = ORCIDAdminForm
     fieldsets = (
         ('Details', {
             'classes': ('collapse',),
@@ -2115,7 +2146,6 @@ class PeopleAdmin(ReadOnlyAdmin):
                      'personexternalidentifiers__personexternalidentifier',
                      'affiliations__organizationid__organizationname']
     list_display = ('personlastname', 'personfirstname', 'orcid', 'affiliation')
-    save_as = True
 
     def orcid(self, obj):
         external_id = Personexternalidentifiers.objects.get(personid=obj.personid)
