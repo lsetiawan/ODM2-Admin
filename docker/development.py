@@ -30,9 +30,9 @@ EMAIL_PORT = 123
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'db_name',
-        'USER': 'user',
-        'PASSWORD': 'password',
+        'NAME': 'odm2_db',
+        'USER': 'postgres',
+        'PASSWORD': 'test',
         'HOST': 'localhost',
         'PORT': '5432',
         'OPTIONS': {
@@ -50,14 +50,12 @@ MAP_CONFIG = {
     "zoom": 2,
     "cluster_sites": False,
     "time_series_months": 3,
-    "cluster_feature_types": ['Profile','Specimen','Excavation','Field area',
-                             'Ecological land classification','Transect'],
-    "display_titles": True,
     "MapBox": {
-      "access_token": 'mapbox accessToken'
+      "access_token": 'mapboxAccessToken'
     },
     "result_value_processing_levels_to_display": [1, 2, 3],
-    "feature_types": ['Site','Profile','Specimen']
+    "feature_types": ['Excavation', 'Field area', 'Weather station', 
+    'Ecological land classification', 'Observation well', 'Site','Stream gage','Transect', 'Profile','Specimen']
 }
 """ END MAP CONFIGURATION """
 
